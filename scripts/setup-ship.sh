@@ -12,6 +12,13 @@ SKILLS_DIR="${CLAUDE_DIR}/skills"
 HOOKS_DIR="${CLAUDE_DIR}/hooks"
 SETTINGS_FILE="${CLAUDE_DIR}/settings.json"
 
+
+# Pre-flight: check dependencies
+for cmd in git gh node; do
+  command -v "$cmd" >/dev/null 2>&1 || { echo "[setup] ERROR: '$cmd' is required but not installed." >&2; exit 1; }
+done
+gh auth status >/dev/null 2>&1 || { echo "[setup] ERROR: gh is not authenticated. Run 'gh auth login' first." >&2; exit 1; }
+
 echo "[setup] Installing /ship skill..."
 
 # Create directories if needed

@@ -1,0 +1,6 @@
+{
+  "name": "ship-skill",
+  "version": "1.0.0",
+  "description": "Ship skill for Claude Code -- auto-review, auto-fix, and merge in one command",
+  "license": "MIT"
+}

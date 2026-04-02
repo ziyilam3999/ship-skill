@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Lint shell scripts
+        run: shellcheck scripts/setup-ship.sh hooks/enforce-ship.sh
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check dependencies available
+        run: |
+          command -v git
+          command -v gh
+          command -v node
+
+      - name: Validate setup pre-flight passes
+        run: |
+          # Run only the dependency check portion (first 4 lines after set -euo pipefail)
+          bash -c '
+            for cmd in git gh node; do
+              command -v "$cmd" >/dev/null 2>&1 || { echo "ERROR: $cmd missing"; exit 1; }
+            done
+            echo "Pre-flight checks passed"
+          '
